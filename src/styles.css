@@ -1,0 +1,123 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface: var(--surface);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-cyan: var(--brand-cyan);
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-pink: var(--brand-pink);
+}
+
+:root {
+  --radius: 1rem;
+
+  /* Brand palette — SnapCut AI */
+  --brand-blue: oklch(0.62 0.21 258);     /* #1D6FFF */
+  --brand-cyan: oklch(0.79 0.16 226);     /* #20C8FF */
+  --brand-purple: oklch(0.66 0.25 320);   /* #C85CFF */
+  --brand-pink: oklch(0.68 0.27 340);     /* #F15BFF */
+
+  --background: oklch(0.16 0.04 265);     /* #0B1020 */
+  --foreground: oklch(1 0 0);
+
+  --surface: oklch(0.21 0.04 265);        /* #121A2E */
+  --card: oklch(0.25 0.05 265);           /* #18233F */
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.25 0.05 265);
+  --popover-foreground: oklch(1 0 0);
+
+  --primary: oklch(0.62 0.21 258);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.28 0.05 265);
+  --secondary-foreground: oklch(1 0 0);
+
+  --muted: oklch(0.25 0.04 265);
+  --muted-foreground: oklch(0.7 0.04 260);   /* #94A3B8 */
+  --accent: oklch(0.66 0.25 320);
+  --accent-foreground: oklch(1 0 0);
+
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(1 0 0);
+
+  --border: oklch(0.32 0.04 265);            /* #24304D */
+  --input: oklch(0.32 0.04 265);
+  --ring: oklch(0.62 0.21 258);
+
+  --gradient-brand: linear-gradient(135deg, #1D6FFF 0%, #20C8FF 45%, #C85CFF 75%, #F15BFF 100%);
+  --shadow-glow: 0 0 60px -10px rgba(29, 111, 255, 0.5), 0 0 90px -20px rgba(200, 92, 255, 0.4);
+  --shadow-card: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(29, 111, 255, 0.18), transparent),
+      radial-gradient(ellipse 60% 50% at 80% 110%, rgba(200, 92, 255, 0.12), transparent);
+    background-attachment: fixed;
+  }
+}
+
+@layer utilities {
+  .bg-brand-gradient { background-image: var(--gradient-brand); }
+  .text-brand-gradient {
+    background-image: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  .glass {
+    background: linear-gradient(180deg, rgba(24, 35, 63, 0.7), rgba(18, 26, 46, 0.5));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .checker {
+    background-image:
+      linear-gradient(45deg, #1f2937 25%, transparent 25%),
+      linear-gradient(-45deg, #1f2937 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #1f2937 75%),
+      linear-gradient(-45deg, transparent 75%, #1f2937 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, 10px 0;
+    background-color: #0f172a;
+  }
+}

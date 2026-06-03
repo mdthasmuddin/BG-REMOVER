@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Upload, Download, Loader2, RotateCcw, ImageIcon } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
@@ -29,6 +29,22 @@ function ToolPage() {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState("");
   const [dragOver, setDragOver] = useState(false);
+
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type.indexOf("image") === 0) {
+          const file = item.getAsFile();
+          if (file) handleFile(file);
+          break;
+        }
+      }
+    };
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, [handleFile]);
 
   const handleFile = useCallback(async (file: File) => {
     if (!TYPES.includes(file.type)) {
@@ -101,8 +117,8 @@ function ToolPage() {
             <div className="grid h-16 w-16 place-items-center rounded-2xl bg-brand-gradient shadow-glow">
               <Upload className="h-7 w-7 text-white" />
             </div>
-            <h3 className="mt-6 text-xl font-semibold">Drag & drop your image</h3>
-            <p className="mt-2 text-sm text-muted-foreground">or click to browse — PNG, JPG, WEBP up to 10MB</p>
+            <h3 className="mt-6 text-xl font-semibold">Drag & drop, paste, or click</h3>
+            <p className="mt-2 text-sm text-muted-foreground">PNG, JPG, WEBP up to 10MB</p>
             <input
               id="file"
               type="file"

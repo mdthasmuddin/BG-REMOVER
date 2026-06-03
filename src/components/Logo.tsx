@@ -9,46 +9,28 @@ export function Logo({ className = "h-8 w-8", showText = true }: { className?: s
       >
         <defs>
           <linearGradient id="logoGradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#1D6FFF" />
-            <stop offset="45%" stopColor="#20C8FF" />
-            <stop offset="75%" stopColor="#C85CFF" />
-            <stop offset="100%" stopColor="#F15BFF" />
+            <stop offset="0%" stopColor="#2EA8FF" />
+            <stop offset="33%" stopColor="#6A5CFF" />
+            <stop offset="66%" stopColor="#9B5CFF" />
+            <stop offset="100%" stopColor="#FF5FD2" />
           </linearGradient>
+          <mask id="cutMask" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
+            <rect width="48" height="48" fill="white" />
+            <path d="M32 16L36 20L32 24L28 20Z" fill="black" />
+          </mask>
         </defs>
-        {/* Background circle */}
-        <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" />
         
-        {/* Image frame (suggesting a photo) */}
-        <rect x="10" y="10" width="28" height="22" rx="3" fill="white" fillOpacity="0.2" />
-        
-        {/* Wand/magic icon for AI */}
+        {/* Main geometric shape with cutout - represents image frame with removed background */}
         <path 
-          d="M34 18L38 14L42 18" 
-          stroke="white" 
-          strokeWidth="2.5" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        />
-        <path 
-          d="M38 14V22" 
-          stroke="white" 
-          strokeWidth="2.5" 
-          strokeLinecap="round"
+          d="M12 12C12 8.68629 14.6863 6 18 6H30C33.3137 6 36 8.68629 36 12V36C36 39.3137 33.3137 42 30 42H18C14.6863 42 12 39.3137 14 36V12Z" 
+          fill="url(#logoGradient)"
+          mask="url(#cutMask)"
         />
         
-        {/* Cutout symbol */}
-        <path 
-          d="M18 28C14 32 18 36 22 32C26 28 30 32 26 36" 
-          stroke="white" 
-          strokeWidth="2.5" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        />
-        
-        {/* Magic sparkles */}
-        <circle cx="40" cy="12" r="1.5" fill="white" />
-        <circle cx="36" cy="10" r="1" fill="white" />
-        <circle cx="40" cy="16" r="1" fill="white" />
+        {/* Subtle AI neural node accent */}
+        <circle cx="18" cy="18" r="1.5" fill="white" fillOpacity="0.8" />
+        <circle cx="32" cy="32" r="1.5" fill="white" fillOpacity="0.8" />
+        <line x1="18" y1="18" x2="32" y2="32" stroke="white" strokeOpacity="0.4" strokeWidth="1" />
       </svg>
       {showText && (
         <span className="text-lg font-bold tracking-tight">

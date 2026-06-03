@@ -30,22 +30,6 @@ function ToolPage() {
   const [progress, setProgress] = useState("");
   const [dragOver, setDragOver] = useState(false);
 
-  useEffect(() => {
-    const handlePaste = (e: ClipboardEvent) => {
-      const items = e.clipboardData?.items;
-      if (!items) return;
-      for (const item of items) {
-        if (item.type.indexOf("image") === 0) {
-          const file = item.getAsFile();
-          if (file) handleFile(file);
-          break;
-        }
-      }
-    };
-    window.addEventListener("paste", handlePaste);
-    return () => window.removeEventListener("paste", handlePaste);
-  }, [handleFile]);
-
   const handleFile = useCallback(async (file: File) => {
     if (!TYPES.includes(file.type)) {
       toast.error("Unsupported format. Use PNG, JPG or WEBP.");
@@ -72,6 +56,22 @@ function ToolPage() {
       setProgress("");
     }
   }, []);
+
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type.indexOf("image") === 0) {
+          const file = item.getAsFile();
+          if (file) handleFile(file);
+          break;
+        }
+      }
+    };
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, [handleFile]);
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();

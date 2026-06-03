@@ -45,6 +45,7 @@
 
   /* Brand palette — SnapCut AI */
   --brand-blue: oklch(0.69 0.17 230);     /* #2EA8FF */
+  --brand-cyan: oklch(0.79 0.16 226);     /* #20C8FF */
   --brand-indigo: oklch(0.62 0.22 290);   /* #6A5CFF */
   --brand-purple: oklch(0.66 0.23 310);   /* #9B5CFF */
   --brand-pink: oklch(0.71 0.25 345);     /* #FF5FD2 */

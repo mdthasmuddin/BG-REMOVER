@@ -24,13 +24,14 @@ const MAX = 10 * 1024 * 1024;
 const TYPES = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
 
 function ToolPage() {
+  const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [original, setOriginal] = useState<string | null>(null);
   const [processed, setProcessed] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState("");
   const [dragOver, setDragOver] = useState(false);
 
-  const handleFile = useCallback(async (file: File) => {
+  const handleFile = useCallback((file: File) => {
     if (!TYPES.includes(file.type)) {
       toast.error("Unsupported format. Use PNG, JPG or WEBP.");
       return;
@@ -40,21 +41,10 @@ function ToolPage() {
       return;
     }
     const url = URL.createObjectURL(file);
+    setOriginalFile(file);
     setOriginal(url);
     setProcessed(null);
-    setLoading(true);
-    setProgress("Loading AI model (first run downloads ~40MB)...");
-    try {
-      const out = await removeBackground(url);
-      setProcessed(out);
-      toast.success("Background removed!");
-    } catch (e: any) {
-      console.error(e);
-      toast.error("Failed to process image. " + (e?.message ?? ""));
-    } finally {
-      setLoading(false);
-      setProgress("");
-    }
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -83,6 +73,40 @@ function ToolPage() {
   const reset = () => {
     setOriginal(null);
     setProcessed(null);
+  };
+
+  const handleRemoveBackground = async () => {
+    if (!originalFile || !original) return;
+
+    setLoading(true);
+    setProgress("Sending image to server...");
+
+    try {
+      // Send to webhook
+      const formData = new FormData();
+      formData.append("image", originalFile);
+
+      const webhookResponse = await fetch("https://thasmu.app.n8n.cloud/webhook/remove-background", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!webhookResponse.ok) {
+        throw new Error("Failed to send image to webhook");
+      }
+
+      // Now process locally with existing AI
+      setProgress("Loading AI model (first run downloads ~40MB)...");
+      const out = await removeBackground(original);
+      setProcessed(out);
+      toast.success("Background removed!");
+    } catch (e: any) {
+      console.error(e);
+      toast.error("Failed to process image. " + (e?.message ?? ""));
+    } finally {
+      setLoading(false);
+      setProgress("");
+    }
   };
 
   const download = () => {
@@ -150,9 +174,26 @@ function ToolPage() {
             </div>
 
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Button onClick={download} disabled={!processed} size="lg" className="bg-brand-gradient text-white border-0 hover:opacity-90 shadow-glow">
-                <Download className="mr-2 h-4 w-4" />Download PNG
-              </Button>
+              {!processed && !loading && (
+                <Button
+                  onClick={handleRemoveBackground}
+                  disabled={loading}
+                  size="lg"
+                  className="bg-brand-gradient text-white border-0 hover:opacity-90 shadow-glow"
+                >
+                  <Upload className="mr-2 h-4 w-4" />Remove Background
+                </Button>
+              )}
+              {processed && (
+                <Button
+                  onClick={download}
+                  disabled={!processed}
+                  size="lg"
+                  className="bg-brand-gradient text-white border-0 hover:opacity-90 shadow-glow"
+                >
+                  <Download className="mr-2 h-4 w-4" />Download PNG
+                </Button>
+              )}
               <Button onClick={reset} variant="outline" size="lg">
                 <RotateCcw className="mr-2 h-4 w-4" />Process New Image
               </Button>

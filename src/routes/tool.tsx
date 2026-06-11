@@ -95,10 +95,14 @@ function ToolPage() {
         throw new Error("Failed to send image to webhook");
       }
 
-      // Now process locally with existing AI
-      setProgress("Loading AI model (first run downloads ~40MB)...");
-      const out = await removeBackground(original);
-      setProcessed(out);
+      // Get JSON response with the processed image URL
+      setProgress("Receiving processed image...");
+      const result = await webhookResponse.json();
+      if (!result.url) {
+        throw new Error("No URL received from webhook");
+      }
+
+      setProcessed(result.url);
       toast.success("Background removed!");
     } catch (e: any) {
       console.error(e);
